@@ -1,6 +1,6 @@
 <?php
 if($_POST['tuka']=="1ban"){
-echo "1番が選択されました。";
+echo "1番が選択されました。。。";
 }elseif($_POST['tuka']=="2ban"){
 echo "2番が選択されました。";
 }elseif($_POST['tuka']=="3ban"){
