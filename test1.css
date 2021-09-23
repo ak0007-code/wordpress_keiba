@@ -1,0 +1,15 @@
+ .table4 {
+    border-collapse: collapse;
+}
+.table4 th {
+    border: 1px solid gray;
+    text-align: center;
+    width: max-content;
+    color: white;
+    background: cyan;
+}
+
+.table4 td {
+    border: 1px solid gray;
+    text-align:left;
+}
