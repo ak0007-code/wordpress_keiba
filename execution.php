@@ -141,10 +141,6 @@ foreach ($win_rates as $win_rate){
     $i++;
     $year++;
 }
-
-// echo "単勝率:".$win_rates[0][0]."%"."<br/>";
-// echo "連体率:".$win_rates[0][1]."%"."<br/>";
-// echo "複勝率:".$win_rates[0][2]."%"."<br/>";
 ?>
 
 <html lang="ja">
@@ -169,12 +165,12 @@ foreach ($win_rates as $win_rate){
     </style>
 </head>
 <body>
-    <table class="table4" border="1">
+    <!-- <table class="table4" border="1">
         <tr><th>年度</th><th>馬名</th><th>馬番</th><th>着順</th></tr>
         <?php foreach ($year_results[0] as $row) : ?>
             <tr><td><?php echo $row->年度 ?></td><td><?php echo $row->馬名 ?></td><td><?php echo $row->馬番 ?></td><td><?php echo $row->着順 ?></td></tr>
         <?php endforeach; ?>
-    </table>
+    </table> -->
     <table class="table4" border="1">
         <tr><th>年度</th><th>馬名</th><th>馬番</th><th>着順</th></tr>
         <?php foreach ($j_results[0] as $row) : ?>
