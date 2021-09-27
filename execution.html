@@ -1,0 +1,196 @@
+<form action="/execution.php" method="post" id="AjaxForm">
+    <p>レース名:
+        <select name="race_name">
+            <option value="有馬記念">有馬記念</option>
+            <option value="日本ダービー">日本ダービー</option>
+            <option value="安田記念">安田記念</option>
+        </select>
+    </p>
+    <p>開始年 ~ 終了年：
+        <select name="year_s" style="width: 20%">
+            <option value="2020">2020</option>
+            <option value="2019">2019</option>
+        </select>
+            ~
+        <select name="year_e" style="width: 20%">
+            <option value="2020">2020</option>
+            <option value="2019">2019</option>
+        </select>
+    </p>
+
+    <script>
+        var tmp_array=new Array();
+        const UMABAN_MAX=25;
+        const WAKUBAN_MAX=15;
+        for(let i=1;i<=10;i++){
+            var f='<div id="j_tmp">'
+                +'<b id="j_no_tmp"></b>'
+                +'<p>レース名:'
+                +'<select id="j_race_name_tmp" name="j_race_name_tmp">'
+                +'<option value="選択無し">選択無し</option>'
+                +'<option value="有馬記念">有馬記念</option>'
+                +'</select>'
+                +'</p>'
+                +'<p>馬番:'
+                +'<input type="checkbox" id="j_umaban_1_tmp" name="j_umaban_1_tmp" value="1">1'
+                +'<input type="checkbox" id="j_umaban_2_tmp" name="j_umaban_2_tmp" value="2">2'
+                +'<input type="checkbox" id="j_umaban_3_tmp" name="j_umaban_3_tmp" value="3">3'
+                +'<input type="checkbox" id="j_umaban_4_tmp" name="j_umaban_4_tmp" value="4">4'
+                +'<input type="checkbox" id="j_umaban_5_tmp" name="j_umaban_5_tmp" value="5">5'
+                +'<input type="checkbox" id="j_umaban_6_tmp" name="j_umaban_6_tmp" value="6">6'
+                +'<input type="checkbox" id="j_umaban_7_tmp" name="j_umaban_7_tmp" value="7">7'
+                +'<input type="checkbox" id="j_umaban_8_tmp" name="j_umaban_8_tmp" value="8">8'
+                +'<input type="checkbox" id="j_umaban_9_tmp" name="j_umaban_9_tmp" value="9">9'
+                +'<input type="checkbox" id="j_umaban_10_tmp" name="j_umaban_10_tmp" value="10">10'
+                +'<input type="checkbox" id="j_umaban_11_tmp" name="j_umaban_11_tmp" value="11">11'
+                +'<input type="checkbox" id="j_umaban_12_tmp" name="j_umaban_12_tmp" value="12">12'
+                +'<input type="checkbox" id="j_umaban_13_tmp" name="j_umaban_13_tmp" value="13">13'
+                +'<input type="checkbox" id="j_umaban_14_tmp" name="j_umaban_14_tmp" value="14">14'
+                +'<input type="checkbox" id="j_umaban_15_tmp" name="j_umaban_15_tmp" value="15">15'
+                +'<input type="checkbox" id="j_umaban_16_tmp" name="j_umaban_16_tmp" value="16">16'
+                +'<input type="checkbox" id="j_umaban_17_tmp" name="j_umaban_17_tmp" value="17">17'
+                +'<input type="checkbox" id="j_umaban_18_tmp" name="j_umaban_18_tmp" value="18">18'
+                +'<input type="checkbox" id="j_umaban_19_tmp" name="j_umaban_19_tmp" value="19">19'
+                +'<input type="checkbox" id="j_umaban_20_tmp" name="j_umaban_20_tmp" value="20">20'
+                +'<input type="checkbox" id="j_umaban_21_tmp" name="j_umaban_21_tmp" value="21">21'
+                +'<input type="checkbox" id="j_umaban_22_tmp" name="j_umaban_22_tmp" value="22">22'
+                +'<input type="checkbox" id="j_umaban_23_tmp" name="j_umaban_23_tmp" value="23">23'
+                +'<input type="checkbox" id="j_umaban_24_tmp" name="j_umaban_24_tmp" value="24">24'
+                +'<input type="checkbox" id="j_umaban_25_tmp" name="j_umaban_25_tmp" value="25">25'
+                +'</p>'
+                +'<p>枠番:'
+                +'<input type="checkbox" id="j_wakuban_1_tmp" name="j_wakuban_1_tmp" value="1">1'
+                +'<input type="checkbox" id="j_wakuban_2_tmp" name="j_wakuban_2_tmp" value="2">2'
+                +'<input type="checkbox" id="j_wakuban_3_tmp" name="j_wakuban_3_tmp" value="3">3'
+                +'<input type="checkbox" id="j_wakuban_4_tmp" name="j_wakuban_4_tmp" value="4">4'
+                +'<input type="checkbox" id="j_wakuban_5_tmp" name="j_wakuban_5_tmp" value="5">5'
+                +'<input type="checkbox" id="j_wakuban_6_tmp" name="j_wakuban_6_tmp" value="6">6'
+                +'<input type="checkbox" id="j_wakuban_7_tmp" name="j_wakuban_7_tmp" value="7">7'
+                +'<input type="checkbox" id="j_wakuban_8_tmp" name="j_wakuban_8_tmp" value="8">8'
+                +'<input type="checkbox" id="j_wakuban_9_tmp" name="j_wakuban_9_tmp" value="9">9'
+                +'<input type="checkbox" id="j_wakuban_10_tmp" name="j_wakuban_10_tmp" value="10">10'
+                +'<input type="checkbox" id="j_wakuban_11_tmp" name="j_wakuban_11_tmp" value="11">11'
+                +'<input type="checkbox" id="j_wakuban_12_tmp" name="j_wakuban_12_tmp" value="12">12'
+                +'<input type="checkbox" id="j_wakuban_13_tmp" name="j_wakuban_13_tmp" value="13">13'
+                +'<input type="checkbox" id="j_wakuban_14_tmp" name="j_wakuban_14_tmp" value="14">14'
+                +'<input type="checkbox" id="j_wakuban_15_tmp" name="j_wakuban_15_tmp" value="15">15'
+                +'</p>'
+                +'</div>';
+            document.write(f);
+
+            // 条件i(div)
+            tmp_array[i]=document.getElementById("j_tmp");
+            tmp_array[i].id="j_"+i;
+
+            // 条件i
+            tmp_array[i]=document.getElementById("j_no_tmp");
+            tmp_array[i].id="j_no_"+i;
+            tmp_array[i].innerHTML="条件"+i;
+
+            // 条件i>レース名
+            tmp_array[i]=document.getElementById("j_race_name_tmp");
+            tmp_array[i].id="j"+i+"_race_name";
+            tmp_array[i].name="j"+i+"_race_name";
+            tmp_array[i].onchange=j_race_name_func;
+            // document.write(tmp_array[i].onchange);
+
+            // 条件i>馬番(1~UMABAN_MAX)
+            for(let j=1;j<=UMABAN_MAX;j++){
+                tmp_array[i]=document.getElementById("j_umaban_"+j+"_tmp");
+                tmp_array[i].id="j"+i+"_umaban_"+j;
+                tmp_array[i].name="j"+i+"_umaban_"+j;
+            }
+
+            // 条件i>枠番(1~WAKUBAN_MAX)
+            for(let j=1;j<=WAKUBAN_MAX;j++){
+                tmp_array[i]=document.getElementById("j_wakuban_"+j+"_tmp");
+                tmp_array[i].id="j"+i+"_wakuban_"+j;
+                tmp_array[i].name="j"+i+"_wakuban_"+j;
+            }
+        }
+
+        // 表示・非表示の調整
+        for(let i=2;i<=10;i++){
+            var tmp=document.getElementById("j_"+i);
+            if(i >= 3){
+                tmp.style.display="none";
+            }            
+            tmp.style.opacity=0.3;
+        }        
+        function j_race_name_func(){
+                let no=this.id.substr(1,1);
+                no=Number(no);
+                if(no == 1 || no == 10){
+                    return;
+                }
+                var info=document.getElementById("j"+no+"_race_name");
+                if(info.value == "選択無し"){
+                    var tmp=document.getElementById("j_"+no);
+                    tmp.style.opacity=0.3;
+                    no=no+1;
+                    for(let i=no;i<=10;i++){
+                        var tmp=document.getElementById("j_"+i);
+                        tmp.style.display="none";
+                    }
+                }else{
+                    var tmp=document.getElementById("j_"+no);
+                    tmp.style.opacity=1;
+                    no=no+1;
+                    tmp=document.getElementById("j_"+no);
+                    tmp.style.display="block";
+                }
+        }
+
+        // var tmp=document.getElementById("j1_race_name");
+        // // tmp.onchange=j1_race_name_change;
+        // document.write(tmp.name);
+        // function j1_race_name_change(){
+        //     document.write("change!");
+        //     // const p1
+        //      = document.getElementById("test1");
+
+        //     // if(p1.style.display=="block"){
+        //     //     // noneで非表示
+        //     //     p1.style.display ="none";
+        //     // }else{
+        //     //     // blockで表示
+        //     //     p1.style.display ="block";
+        //     // }    
+        // }
+    </script>
+
+    <!-- <input type="button" value="ボタン1" onclick="clickBtn1()" /> -->
+    <!-- <script>
+        function j1_race_name_change(){
+            document.write("change!!");
+            // const p1 = document.getElementById("test1");
+
+            // if(p1.style.display=="block"){
+            //     // noneで非表示
+            //     p1.style.display ="none";
+            // }else{
+            //     // blockで表示
+            //     p1.style.display ="block";
+            // }     
+        }
+        // //初期表示は非表示
+        // document.getElementById("j_10").style.display ="none";
+        
+        // function clickBtn1(){
+        //     const p1 = document.getElementById("j_10");
+        
+        //     if(p1.style.display=="block"){
+        //         // noneで非表示
+        //         p1.style.display ="none";
+        //     }else{
+        //         // blockで表示
+        //         p1.style.display ="block";
+        //     }
+        // }
+    </script> -->
+
+    <p><input type="submit" value="phpを実行" class="submit"></p>
+</form>
+<div id="result">「phpを実行」ボタンを押すとここに実行結果が表示されます。</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js" async=""></script>
+<script src="/exectl.js"></script>
