@@ -5,12 +5,6 @@ $J_MAX=10; // 条件MAX
 $UMABAN_MAX=25; // 馬番MAX
 $WAKUBAN_MAX=15; // 枠番MAX
 
-// ヘッダー表示
-echo "$_POST[race_name]の結果($_POST[year_s]～$_POST[year_e])";
-echo "<br>";
-echo "<br>更新：".date("Y/m/d H:i:s");
-echo "<br>"."<br>";
-
 // 開始年～終了年を配列に格納
 $diff = $_POST['year_e'] - $_POST['year_s'];
 for ($i=0;$i<=$diff;$i++){
@@ -92,20 +86,11 @@ for ($j=0;$j<$J_MAX;$j++){
         $wakuban_regexp[$j]="^(".$wakuban_regexp[$j].")$";
         $year_regexp=="^(".$year_regexp.")$";
 
-        echo "$umaban_regexp[$j]";
-        echo "</br>";
-        echo "$wakuban_regexp[$j]";
-        echo "</br>";
-
         // 条件j:SQL実行
         $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array[$j] . " WHERE 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 年度 REGEXP \"$year_regexp\"");
         if(count($j_results[$j])!=0){
             $j_result_flg[$j]=1;
         }
-
-        // echo $cnt;
-        // // print_r($j_results);
-        // echo "</br>";
     }else{
         break;
     }
