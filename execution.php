@@ -1,9 +1,11 @@
 <?php
 
 // 定数定義
-$J_MAX=10; // 条件MAX
-$UMABAN_MAX=25; // 馬番MAX
-$WAKUBAN_MAX=15; // 枠番MAX
+const J_MAX=10; // 条件MAX
+const UMABAN_MAX=25; // 馬番MAX
+const WAKUBAN_MAX=15; // 枠番MAX
+const SEIREI_MIN=2; // 性齢MIN
+const SEIREI_MAX=9; // 性齢MAX
 
 // 開始年～終了年を配列に格納
 $diff = $_POST['year_e'] - $_POST['year_s'];
@@ -14,20 +16,30 @@ for ($i=0;$i<=$diff;$i++){
 // データ格納用配列
 $umaban_array=array(); // 馬番
 $wakuban_array=array(); // 枠番
+$seirei_array_h=array(); // 性齢 牝馬
+$seirei_array_b=array(); // 性齢 牡馬
 
 // 条件1~10を確認 j:条件 i:個別番号
-for ($j=0;$j<$J_MAX;$j++){
+for ($j=0;$j<J_MAX;$j++){
     // 「選択無し」以外の場合のみ格納処理を実行
     if($_POST["j".($j+1)."_race_name"] != "選択無し"){
         // レース名
         $race_name_array[$j]=$_POST["j".($j+1)."_race_name"];
         // 馬番格納
-        for($i=0;$i<$UMABAN_MAX;$i++){
+        for($i=0;$i<UMABAN_MAX;$i++){
             $umaban_array[$j][$i]=$_POST["j".($j+1)."_umaban_".($i+1)];
         }
         // 枠番格納
-        for($i=0;$i<$WAKUBAN_MAX;$i++){
+        for($i=0;$i<WAKUBAN_MAX;$i++){
             $wakuban_array[$j][$i]=$_POST["j".($j+1)."_wakuban_".($i+1)];
+        }
+        // 性齢牝馬格納
+        for($i=0;$i<(SEIREI_MAX-SEIREI_MIN+1);$i++){
+            $seirei_array_h[$j][$i]=$_POST["j".($j+1)."_seirei_h".($i+SEIREI_MIN)];
+        }
+        // 性齢牡馬格納
+        for($i=0;$i<(SEIREI_MAX-SEIREI_MIN+1);$i++){
+            $seirei_array_b[$j][$i]=$_POST["j".($j+1)."_seirei_b".($i+SEIREI_MIN)];
         }
     }
 }
@@ -44,13 +56,13 @@ $keiba_wpdb = new wpdb($db_user, $db_passwd, 'keiba', $db_host);
 $j_result_flg=array();
 
 // 条件1~10の結果をj_resultsに格納
-for ($j=0;$j<$J_MAX;$j++){
+for ($j=0;$j<J_MAX;$j++){
 
     // 「選択無し」以外の場合
     if($_POST["j".($j+1)."_race_name"] != "選択無し"){
         // 馬番
         $umaban_regexp[$j]=".*";
-        for($i=0;$i<$UMABAN_MAX;$i++){
+        for($i=0;$i<UMABAN_MAX;$i++){
             if($umaban_array[$j][$i]){
                 if($umaban_regexp[$j]==".*"){
                     $umaban_regexp[$j]=(string)$umaban_array[$j][$i];
@@ -62,7 +74,7 @@ for ($j=0;$j<$J_MAX;$j++){
 
         // 枠番
         $wakuban_regexp[$j]=".*";
-        for($i=0;$i<$WAKUBAN_MAX;$i++){
+        for($i=0;$i<WAKUBAN_MAX;$i++){
             if($wakuban_array[$j][$i]){
                 if($wakuban_regexp[$j]==".*"){
                     $wakuban_regexp[$j]=(string)$wakuban_array[$j][$i];
