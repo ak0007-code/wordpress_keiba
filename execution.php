@@ -16,8 +16,8 @@ for ($i=0;$i<=$diff;$i++){
 // データ格納用配列
 $umaban_array=array(); // 馬番
 $wakuban_array=array(); // 枠番
-$seirei_array_h=array(); // 性齢 牝馬
-$seirei_array_b=array(); // 性齢 牡馬
+$seirei_h_array=array(); // 性齢 牝馬
+$seirei_b_array=array(); // 性齢 牡馬
 
 // 条件1~10を確認 j:条件 i:個別番号
 for ($j=0;$j<J_MAX;$j++){
@@ -35,11 +35,11 @@ for ($j=0;$j<J_MAX;$j++){
         }
         // 性齢牝馬格納
         for($i=0;$i<(SEIREI_MAX-SEIREI_MIN+1);$i++){
-            $seirei_array_h[$j][$i]=$_POST["j".($j+1)."_seirei_h".($i+SEIREI_MIN)];
+            $seirei_h_array[$j][$i]=$_POST["j".($j+1)."_seirei_h".($i+SEIREI_MIN)];
         }
         // 性齢牡馬格納
         for($i=0;$i<(SEIREI_MAX-SEIREI_MIN+1);$i++){
-            $seirei_array_b[$j][$i]=$_POST["j".($j+1)."_seirei_b".($i+SEIREI_MIN)];
+            $seirei_b_array[$j][$i]=$_POST["j".($j+1)."_seirei_b".($i+SEIREI_MIN)];
         }
     }
 }
@@ -84,6 +84,25 @@ for ($j=0;$j<J_MAX;$j++){
             }
         }
 
+        // 性齢
+        $seirei_regexp[$j]=".*";
+        for($i=0;$i<(SEIREI_MAX-SEIREI_MIN-1);$i++){
+            if($seirei_h_array[$j][$i]){
+                if($seirei_regexp[$j]==".*"){
+                    $seirei_regexp[$j]=(string)$seirei_h_array[$j][$i];
+                }else{
+                    $seirei_regexp[$j]="$seirei_regexp[$j]"."|".(string)$seirei_h_array[$j][$i];
+                }
+            }
+            if($seirei_b_array[$j][$i]){
+                if($seirei_regexp[$j]==".*"){
+                    $seirei_regexp[$j]=(string)$seirei_b_array[$j][$i];
+                }else{
+                    $seirei_regexp[$j]="$seirei_regexp[$j]"."|".(string)$seirei_b_array[$j][$i];
+                }
+            }
+        }
+
         // 年度
         $year_regexp=".*";
         foreach ($year_array as $year){
@@ -96,10 +115,11 @@ for ($j=0;$j<J_MAX;$j++){
         // 文字列整形
         $umaban_regexp[$j]="^(".$umaban_regexp[$j].")$";
         $wakuban_regexp[$j]="^(".$wakuban_regexp[$j].")$";
+        $seirei_regexp[$j]="^(".$seirei_regexp[$j].")$";
         $year_regexp=="^(".$year_regexp.")$";
 
         // 条件j:SQL実行
-        $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array[$j] . " WHERE 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 年度 REGEXP \"$year_regexp\"");
+        $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array[$j] . " WHERE 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 年度 REGEXP \"$year_regexp\" AND 性齢 REGEXP \"$seirei_regexp[$j]\"");
         if(count($j_results[$j])!=0){
             $j_result_flg[$j]=1;
         }
@@ -107,6 +127,9 @@ for ($j=0;$j<J_MAX;$j++){
         break;
     }
 }
+
+// echo $seirei_regexp[0];
+// echo "</br>";
 
 // 結果が0件(j_result_flgに1が無い)の場合、処理を終了する
 if(!(in_array(1,$j_result_flg))){
@@ -212,10 +235,10 @@ foreach ($win_rates as $win_rate){
 </head>
 <body>
     <table class="table4" border="1">
-        <tr><th>年度</th><th>馬名</th><th>馬番</th><th>枠番</th><th>着順</th></tr>
+        <tr><th>年度</th><th>馬名</th><th>馬番</th><th>枠番</th><th>性齢</th><th>着順</th></tr>
         <?php foreach ($year_results as $year_result) : ?>
             <?php foreach ($year_result as $row) : ?>
-                <tr><td><?php echo $row->年度 ?></td><td><?php echo $row->馬名 ?></td><td><?php echo $row->馬番 ?></td><td><?php echo $row->枠番 ?></td><td><?php echo $row->着順 ?></td></tr>
+                <tr><td><?php echo $row->年度 ?></td><td><?php echo $row->馬名 ?></td><td><?php echo $row->馬番 ?></td><td><?php echo $row->枠番 ?></td><td><?php echo $row->性齢 ?></td><td><?php echo $row->着順 ?></td></tr>
             <?php endforeach; ?>
         <?php endforeach; ?>
     </table>
