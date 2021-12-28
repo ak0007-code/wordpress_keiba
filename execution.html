@@ -117,6 +117,54 @@
                 +'<input type="checkbox" id="j_kinryo_585_tmp" name="j_kinryo_585_tmp" value="58.5">58.5'
                 +'<input type="checkbox" id="j_kinryo_590_tmp" name="j_kinryo_590_tmp" value="59">59'
                 +'</p>'
+                +'<p style="margin-left: 50px;">タイム '
+                +'<select id="j_time_min_tmp" name="j_time_min_tmp" style="width: 10%;">'
+                +'<option value="">-</option>'
+                +'<option value="2:30">2:30</option>'
+                +'<option value="2:31">2:31</option>'
+                +'<option value="2:32">2:32</option>'
+                +'<option value="2:33">2:33</option>'
+                +'<option value="2:34">2:34</option>'
+                +'<option value="2:35">2:35</option>'
+                +'<option value="2:36">2:36</option>'
+                +'</select> ~ '
+                +'<select id="j_time_max_tmp" name="j_time_max_tmp" style="width: 10%;">'
+                +'<option value="">-</option>'
+                +'<option value="2:30">2:30</option>'
+                +'<option value="2:31">2:31</option>'
+                +'<option value="2:32">2:32</option>'
+                +'<option value="2:33">2:33</option>'
+                +'<option value="2:34">2:34</option>'
+                +'<option value="2:35">2:35</option>'
+                +'<option value="2:36">2:36</option>'
+                +'</select>'
+                +'</p>'
+                +'<p style="margin-left: 50px;">通過 '
+                +'<select id="j_tuka_1_tmp" name="j_tuka_1_tmp" style="width: 8%;">'
+                +'<option value="">-</option>'
+                +'<option value="1">1</option>'
+                +'<option value="2">2</option>'
+                +'<option value="10">10</option>'
+                +'</select> - '
+                +'<select id="j_tuka_2_tmp" name="j_tuka_2_tmp" style="width: 8%;">'
+                +'<option value="">-</option>'
+                +'<option value="1">1</option>'
+                +'<option value="2">2</option>'
+                +'<option value="10">10</option>'
+                +'</select> - '
+                +'<select id="j_tuka_3_tmp" name="j_tuka_3_tmp" style="width: 8%;">'
+                +'<option value="">-</option>'
+                +'<option value="1">1</option>'
+                +'<option value="2">2</option>'
+                +'<option value="10">10</option>'
+                +'</select> - '
+                +'<select id="j_tuka_4_tmp" name="j_tuka_4_tmp" style="width: 8%;">'
+                +'<option value="">-</option>'
+                +'<option value="1">1</option>'
+                +'<option value="2">2</option>'
+                +'<option value="10">10</option>'
+                +'</select>'
+                +'</p>'
                 +'</div>';
             document.write(f);
 
@@ -171,6 +219,32 @@
                 tmp_array[i].name="j"+i+"_kinryo_"+k;
                 // document.writeln(tmp_array[i].id);
             }
+
+            // タイム最小値
+            tmp_array[i]=document.getElementById("j_time_min_tmp");
+            tmp_array[i].id="j"+i+"_time_min";
+            tmp_array[i].name="j"+i+"_time_min";
+            // タイム最大値
+            tmp_array[i]=document.getElementById("j_time_max_tmp");
+            tmp_array[i].id="j"+i+"_time_max";
+            tmp_array[i].name="j"+i+"_time_max";
+
+            // 通過(第1コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_1_tmp");
+            tmp_array[i].id="j"+i+"_tuka_1";
+            tmp_array[i].name="j"+i+"_tuka_1";
+            // 通過(第2コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_2_tmp");
+            tmp_array[i].id="j"+i+"_tuka_2";
+            tmp_array[i].name="j"+i+"_tuka_2";
+            // 通過(第3コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_3_tmp");
+            tmp_array[i].id="j"+i+"_tuka_3";
+            tmp_array[i].name="j"+i+"_tuka_3";
+            // 通過(第4コーナー)
+            tmp_array[i]=document.getElementById("j_tuka_4_tmp");
+            tmp_array[i].id="j"+i+"_tuka_4";
+            tmp_array[i].name="j"+i+"_tuka_4";
         }
 
         // 表示・非表示の調整
