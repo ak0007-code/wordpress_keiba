@@ -8,6 +8,7 @@ const SEIREI_MIN=2; // 性齢MIN
 const SEIREI_MAX=9; // 性齢MAX
 const KINRYO_MIN=52; // 斤量MIN
 const KINRYO_MAX=59; // 斤量MAX
+const NINKI_MAX=25; // 人気MAX
 
 // 開始年～終了年を配列に格納
 $diff = $_POST['year_e'] - $_POST['year_s'];
@@ -27,6 +28,11 @@ $tuka_1_array=array(); // 通過(第1コーナー)
 $tuka_2_array=array(); // 通過(第2コーナー)
 $tuka_3_array=array(); // 通過(第3コーナー)
 $tuka_4_array=array(); // 通過(第4コーナー)
+$agari_min_array=array(); // 上り最小値
+$agari_max_array=array(); // 上り最大値
+$tansho_min_array=array(); // 単勝最小値
+$tansho_max_array=array(); // 単勝最大値
+$ninki_array=array(); // 人気
 
 // 条件1~10を確認 j:条件 i:個別番号
 for ($j=0;$j<J_MAX;$j++){
@@ -34,14 +40,17 @@ for ($j=0;$j<J_MAX;$j++){
     if($_POST["j".($j+1)."_race_name"] != "選択無し"){
         // レース名
         $race_name_array[$j]=$_POST["j".($j+1)."_race_name"];
+
         // 馬番格納
         for($i=0;$i<UMABAN_MAX;$i++){
             $umaban_array[$j][$i]=$_POST["j".($j+1)."_umaban_".($i+1)];
         }
+
         // 枠番格納
         for($i=0;$i<WAKUBAN_MAX;$i++){
             $wakuban_array[$j][$i]=$_POST["j".($j+1)."_wakuban_".($i+1)];
         }
+
         // 性齢牝馬格納
         for($i=0;$i<(SEIREI_MAX-SEIREI_MIN+1);$i++){
             $seirei_h_array[$j][$i]=$_POST["j".($j+1)."_seirei_h".($i+SEIREI_MIN)];
@@ -50,14 +59,17 @@ for ($j=0;$j<J_MAX;$j++){
         for($i=0;$i<(SEIREI_MAX-SEIREI_MIN+1);$i++){
             $seirei_b_array[$j][$i]=$_POST["j".($j+1)."_seirei_b".($i+SEIREI_MIN)];
         }
+
         // 斤量格納
         for($i=0,$k=KINRYO_MIN;$k<=KINRYO_MAX;$i++,$k=$k+0.5){
             $kinryo_array[$j][$i]=$_POST["j".($j+1)."_kinryo_".($k*10)]; // 斤量のid,namaは52.5→525と表す
         }
+
         // タイム最小値格納
         $time_min_array[$j]=$_POST["j".($j+1)."_time_min"];
         // タイム最大値格納
         $time_max_array[$j]=$_POST["j".($j+1)."_time_max"];
+
         // 通過(第1コーナー)格納
         $tuka_1_array[$j]=$_POST["j".($j+1)."_tuka_1"];
         // 通過(第2コーナー)格納
@@ -66,6 +78,21 @@ for ($j=0;$j<J_MAX;$j++){
         $tuka_3_array[$j]=$_POST["j".($j+1)."_tuka_3"];
         // 通過(第4コーナー)格納
         $tuka_4_array[$j]=$_POST["j".($j+1)."_tuka_4"];
+
+        // 上り最小値格納
+        $agari_min_array[$j]=$_POST["j".($j+1)."_agari_min"];
+        // 上り最大値格納
+        $agari_max_array[$j]=$_POST["j".($j+1)."_agari_max"];
+
+        // 単勝最小値格納
+        $tansho_min_array[$j]=$_POST["j".($j+1)."_tansho_min"];
+        // 単勝最大値格納
+        $tansho_max_array[$j]=$_POST["j".($j+1)."_tansho_max"];
+
+        // 人気格納
+        for($i=0;$i<NINKI_MAX;$i++){
+            $ninki_array[$j][$i]=$_POST["j".($j+1)."_ninki_".($i+1)];
+        }
     }
 }
 
@@ -146,7 +173,7 @@ for ($j=0;$j<J_MAX;$j++){
             $time_min_regexp=$time_min_array[$j];
         }
         // タイム最大値
-        $time_max_regexp="9:59*";
+        $time_max_regexp="9:59";
         if($time_max_array[$j]){
             $time_max_regexp=$time_max_array[$j];
         }
@@ -172,6 +199,40 @@ for ($j=0;$j<J_MAX;$j++){
             $tuka_4_regexp=$tuka_4_array[$j];
         }
 
+        // 上り最小値
+        $agari_min_regexp="0";
+        if($agari_min_array[$j]){
+            $agari_min_regexp=$agari_min_array[$j];
+        }
+        // 上り最大値
+        $agari_max_regexp="99";
+        if($agari_max_array[$j]){
+            $agari_max_regexp=$agari_max_array[$j];
+        }
+
+        // 単勝最小値
+        $tansho_min_regexp="0";
+        if($tansho_min_array[$j]){
+            $tansho_min_regexp=$tansho_min_array[$j];
+        }
+        // 単勝最大値
+        $tansho_max_regexp="1000";
+        if($tansho_max_array[$j]){
+            $tansho_max_regexp=$tansho_max_array[$j];
+        }
+
+        // 人気
+        $ninki_regexp[$j]=".*";
+        for($i=0;$i<NINKI_MAX;$i++){
+            if($ninki_array[$j][$i]){
+                if($ninki_regexp[$j]==".*"){
+                    $ninki_regexp[$j]=(string)$ninki_array[$j][$i];
+                }else{
+                    $ninki_regexp[$j]="$ninki_regexp[$j]"."|".(string)$ninki_array[$j][$i];
+                }
+            }
+        }
+
         // 年度
         $year_regexp=".*";
         foreach ($year_array as $year){
@@ -187,11 +248,11 @@ for ($j=0;$j<J_MAX;$j++){
         $wakuban_regexp[$j]="^(".$wakuban_regexp[$j].")$";
         $seirei_regexp[$j]="^(".$seirei_regexp[$j].")$";
         $kinryo_regexp[$j]="^(".$kinryo_regexp[$j].")$";
+        $ninki_regexp[$j]="^(".$ninki_regexp[$j].")$";
         $year_regexp=="^(".$year_regexp.")$";
 
-
         // 条件j:SQL実行
-        $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array[$j] . " WHERE 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 年度 REGEXP \"$year_regexp\" AND 性齢 REGEXP \"$seirei_regexp[$j]\" AND 斤量 REGEXP \"$kinryo_regexp[$j]\" AND タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\" AND 通過 REGEXP \"$tuka_1_regexp-$tuka_2_regexp-$tuka_3_regexp-$tuka_4_regexp\"");
+        $j_results[$j]=$keiba_wpdb->get_results("SELECT * FROM " . $race_name_array[$j] . " WHERE 馬番 REGEXP \"$umaban_regexp[$j]\" AND 枠番 REGEXP \"$wakuban_regexp[$j]\" AND 年度 REGEXP \"$year_regexp\" AND 性齢 REGEXP \"$seirei_regexp[$j]\" AND 斤量 REGEXP \"$kinryo_regexp[$j]\" AND タイム BETWEEN \"$time_min_regexp\" AND \"$time_max_regexp\" AND 通過 REGEXP \"$tuka_1_regexp-$tuka_2_regexp-$tuka_3_regexp-$tuka_4_regexp\" AND 上り BETWEEN \"$agari_min_regexp\" AND \"$agari_max_regexp\" AND 単勝 BETWEEN \"$tansho_min_regexp\" AND \"$tansho_max_regexp\" AND 人気 REGEXP \"$ninki_regexp[$j]\"");
         if(count($j_results[$j])!=0){
             $j_result_flg[$j]=1;
         }
@@ -307,10 +368,10 @@ foreach ($win_rates as $win_rate){
 </head>
 <body>
     <table class="table4" border="1">
-        <tr><th>年度</th><th>馬名</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>タイム</th><th>通過</th><th>着順</th></tr>
+        <tr><th>年度</th><th>馬名</th><th>馬番</th><th>枠番</th><th>性齢</th><th>斤量</th><th>タイム</th><th>通過</th><th>上り</th><th>単勝</th><th>人気</th><th>馬体重</th><th>着順</th></tr>
         <?php foreach ($year_results as $year_result) : ?>
             <?php foreach ($year_result as $row) : ?>
-                <tr><td><?php echo $row->年度 ?></td><td><?php echo $row->馬名 ?></td><td><?php echo $row->馬番 ?></td><td><?php echo $row->枠番 ?></td><td><?php echo $row->性齢 ?></td><td><?php echo $row->斤量 ?></td><td><?php echo substr_replace(substr($row->タイム, 1, 6),".",4,1) ?></td><td><?php echo $row->通過 ?></td><td><?php echo $row->着順 ?></td></tr>
+                <tr><td><?php echo $row->年度 ?></td><td><?php echo $row->馬名 ?></td><td><?php echo $row->馬番 ?></td><td><?php echo $row->枠番 ?></td><td><?php echo $row->性齢 ?></td><td><?php echo $row->斤量 ?></td><td><?php echo substr_replace(substr($row->タイム, 1, 6),".",4,1) ?></td><td><?php echo $row->通過 ?></td><td><?php echo $row->上り ?></td><td><?php echo $row->単勝 ?></td><td><?php echo $row->人気 ?></td><td><?php echo $row->馬体重 ?></td><td><?php echo $row->着順 ?></td></tr>
             <?php endforeach; ?>
         <?php endforeach; ?>
     </table>
